@@ -58,5 +58,5 @@ T.tag_add(tk.SEL, "1.0", tk.END)
 T.focus_set()
 
 
-
+# turns on the main window and waits i think
 root.mainloop()
