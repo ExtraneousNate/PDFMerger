@@ -68,7 +68,7 @@ T = tk.Text(root, height=4, width=60)
 # positioning the text box
 T.grid(row = 4 )
 # putting instruction in the text box
-T.insert(tk.END, "paste a list of files here in the order you want them to be merged")
+T.insert(tk.END, "Paste a list of files here in the order you want them to be merged. File names must be comma seperated and include the "".pdf"" extention")
 # select the instructions so they can easily be overwrited with a paste command
 T.tag_add(tk.SEL, "1.0", tk.END)
 # setting the cursor in the textbox
