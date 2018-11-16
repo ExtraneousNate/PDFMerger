@@ -6,22 +6,59 @@ from tkinter import filedialog
 
 # this will be where the pdf merging code goes
 def MergePDF():
-    print(T.get(1.0, tk.END))
+    # print(T.get(1.0, tk.END))
 
-
+    # creating the object to be merged into
     merger = PdfFileMerger()
 
+    # Get the file path the user has browsed for
     Path = folderPath.get()
+
+    # Get a string for the list of files to be merged
     FileString = T.get(1.0, tk.END)
-    #Path = "C:\\Users\\HUFFMANN\\Desktop\\temp--\\test bom merging"
-    #FileString = "2038308.pdf 2038302.pdf 2038303.pdf 2038330.pdf 2038249.pdf 2038313.pdf 2038334.pdf 2038273.pdf 2002612.pdf 2027433.pdf 2038318.pdf 2038256.pdf 2038270.pdf 2038337.pdf 2038338.pdf 2038272.pdf 2038352.pdf 2038354.pdf 2038740.pdf"
+
+    # split the string by commas
     FileList = FileString.split(",")
 
-    for file in FileList:
-        file=file.strip()
-        print(file)
-        merger.append(fileobj = Path+"\\" +file)
+    # Get the size of the list of files to be merged
+    ListCount=len(FileList)
 
+    # for testing and trouble shooting purposes
+    print(ListCount)
+
+    # loop through eash object in the string
+    for file in FileList:
+        # Remove any extra white space from the file names
+        file=file.strip()
+        # print file name for testing and trouble shooting
+        print(file)
+        # error handling
+        try:
+            # Merging the file onto the existing merge object
+            merger.append(fileobj = Path+"\\" +file)
+        # Main error is FileNotFoundError
+        except FileNotFoundError:
+            # Create a new window to display the error
+            win = tk.Toplevel()
+            win.wm_title("Window")
+            # Label in error window
+            l1 = tk.Label(win, text="The following files was not found:")
+            l1.grid(row=0)
+            # label to display the name of the file that caused the error
+            l2 = tk.Label(win, text=file)
+            l2.grid(row=1, column=0)
+
+            l3 = tk.Label(win, text="Merge Failed")
+            l3.grid(row=2)
+            # Button to close the error message window
+            b = tk.Button(win, text="Close", width = 15, command=win.destroy)
+            b.grid(row=3, column=0)
+
+            # I think this will kick the program out of the merge routine on error
+            return 0
+
+    # write the merged data to a file when merging is complete
+    # Could add some error hanging here for where it can't overwrited the existing file because it is currently open
     merger.write(Path+"\\PrintPackage.pdf")
 
 # function for browsing to the pdf file locaitons
@@ -32,6 +69,17 @@ def BrowseFolder():
     global folderPath
     # put the file path in the global varriable
     folderPath.set(filename)
+
+# SOME REF CODE THAT CAN BE USED TO MAKE A PROGRESS WINDOW
+# def OpenProgressWindow():
+#     win = tk.Toplevel()
+#     win.wm_title("Window")
+#
+#     l = tk.Label(win, text="Input")
+#     l.grid(row=0, column=0)
+#
+#     b = tk.Button(win, text="Okay", command=win.destroy)
+#     b.grid(row=1, column=0)
 
 # declaire the main window
 root =tk.Tk()
@@ -77,10 +125,3 @@ T.focus_set()
 
 
 root.mainloop()
-
-
-
-# b = Button(root,text='okay',command=MergFile)
-# b.pack(side='bottom')
-#
-# root.mainloop()
